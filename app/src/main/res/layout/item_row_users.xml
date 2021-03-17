@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/single_img_user"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                    android:id="@+id/single_name_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_1"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/design_default_color_primary"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dash"
+                    android:textSize="16sp"/>
+            <TextView
+                    android:id="@+id/single_username_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user1"
+                    android:textSize="16sp"/>
+        </LinearLayout>
+        <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                app:cardBackgroundColor="#55CCCCCC"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="4dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content">
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="3dp"
+                    android:paddingHorizontal="8dp">
+                <ImageView android:layout_width="10dp"
+                           android:layout_height="match_parent"
+                           android:layout_gravity="center"
+                           android:layout_marginEnd="6dp"
+                           android:src="@drawable/git_icon"/>
+                <TextView
+                        android:id="@+id/single_repo_user"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="@string/repository"
+                        android:textSize="12sp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</LinearLayout>

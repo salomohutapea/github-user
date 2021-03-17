@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Github User</string>
+    <string name="user_1">User 1</string>
+    <string name="dash">-</string>
+    <string name="user1">\@user1</string>s
+    <string name="repository">Repository</string>
 
     <string-array name="username">
         <item>JakeWharton</item>
