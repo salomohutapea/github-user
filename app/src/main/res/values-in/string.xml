@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pengguna GitHub</string>
+    <string name="user_1">User 1</string>
+    <string name="dash">-</string>
+    <string name="user1">\@pengguna1</string>s
+    <string name="repository">Repository</string>
+    <string name="salomo_hutapea">Salomo Hutapea</string>
+    <string name="salomohutapea">\@salomohutapea</string>
+    <string name="google">Google</string>
+    <string name="_100">100</string>
+    <string name="followers">pengikut</string>
+    <string name="dot">·</string>
+    <string name="_200">200</string>
+    <string name="following">mengikuti</string>
+    <string name="location">Lokasi</string>
+    <string name="search">Pencarian</string>
+    <string name="search_hint">username</string>
+    <string name="show_more">Tampilkan lebih</string>
+    <string name="user_follow_icon">Icon follow pengguna</string>
+    <string name="repository_count_icon">Icon jumlah repository</string>
+    <string name="change_language_settings">Ubah Pengaturan Bahasa</string>
+</resources>

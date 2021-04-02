@@ -1,76 +1,133 @@
 package com.example.githubuser
 
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
-import android.content.res.TypedArray
 import android.os.Bundle
+import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.githubuser.adapters.UserAdapter
 import com.example.githubuser.databinding.ActivityMainBinding
+import com.example.githubuser.models.UserDetail
+import com.example.githubuser.models.Users
+import com.example.githubuser.viewmodels.MainViewModel
+import com.example.githubuser.viewmodels.UserListViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
-    private lateinit var dataName: Array<String>
-    private lateinit var dataUsername: Array<String>
-    private lateinit var dataCompany: Array<String>
-    private lateinit var dataFollowers: Array<String>
-    private lateinit var dataFollowing: Array<String>
-    private lateinit var dataLocation: Array<String>
-    private lateinit var dataRepository: Array<String>
-    private lateinit var dataPhoto: TypedArray
-
-    private var users = arrayListOf<User>()
+    private lateinit var mainViewModel: MainViewModel
+    private lateinit var userListViewModel: UserListViewModel
+    private var list = ArrayList<Users>()
+    private var detailList = ArrayList<UserDetail>()
+    private var currentPosition = 0
+    private var isBounded = IntArray(100){0}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.rvUsers
 
-        prepare()
-        addItem()
+        initializeViewModel()
+
     }
 
-    private fun prepare() {
-        dataName = resources.getStringArray(R.array.name)
-        dataUsername = resources.getStringArray(R.array.username)
-        dataPhoto = resources.obtainTypedArray(R.array.avatar)
-        dataCompany = resources.getStringArray(R.array.company)
-        dataFollowers = resources.getStringArray(R.array.followers)
-        dataFollowing = resources.getStringArray(R.array.following)
-        dataRepository = resources.getStringArray(R.array.repository)
-        dataLocation = resources.getStringArray(R.array.location)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        searchView.queryHint = resources.getString(R.string.search_hint)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                if (query.isEmpty()) return true
+                true.showLoading()
+                isBounded = IntArray(100){0}
+                mainViewModel.setSearchUser(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        })
+        return true
     }
 
-    private fun addItem() {
-        for (position in dataName.indices) {
-            val user = User(
-                following = dataFollowing[position],
-                followers = dataFollowers[position],
-                company = dataCompany[position],
-                name = dataName[position],
-                username = dataUsername[position],
-                location = dataLocation[position],
-                repository = dataRepository[position],
-                avatar = dataPhoto.getResourceId(position, -1)
-            )
-            users.add(user)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_change_settings) {
+            val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
+            startActivity(mIntent)
         }
-        showRecyclerList(users)
+        return super.onOptionsItemSelected(item)
     }
 
-    private fun showRecyclerList(list: ArrayList<User>) {
+    private fun initializeViewModel() {
+        true.showLoading()
+        mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
+        userListViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(UserListViewModel::class.java)
+        mainViewModel.getSearchResult().observe(this) {
+            if (it.size != 0) {
+                list = it
+                showRecyclerList()
+            }
+            false.showLoading()
+        }
+        mainViewModel.setSearchUser("salomohutapea")
+    }
+
+    private fun Boolean.showLoading() {
+        if (this) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    private fun showRecyclerList() {
+        binding.rvUsers.itemAnimator = null
+        currentPosition = 0
         binding.rvUsers.layoutManager = LinearLayoutManager(this)
+
         val listUserAdapter = UserAdapter(list)
         binding.rvUsers.adapter = listUserAdapter
 
         listUserAdapter.setOnItemClickCallback(object : UserAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: User) {
+            override fun onItemClicked(data: Users) {
                 val intent = Intent(this@MainActivity, DetailActivity::class.java)
-                intent.putExtra("DATA_USER", data)
+                intent.putExtra("USERNAME", data.username)
                 startActivity(intent)
+            }
+        })
+
+        userListViewModel.getDetailResult().second.observe(this) {
+            currentPosition = it
+        }
+
+        userListViewModel.getDetailResult().first.observe(this) {
+            list[currentPosition].followers = it.followers
+            list[currentPosition].public_repos = it.public_repos
+            list[currentPosition].following = it.following
+            listUserAdapter.notifyItemChanged(currentPosition)
+        }
+
+        listUserAdapter.setOnItemBoundCallback(object : UserAdapter.OnItemBindCallback {
+            override fun onItemBound(username: String?, position: Int) {
+                if (username != null && isBounded[position] == 0) {
+                    userListViewModel.setDetailUser(username, position)
+                }
+                isBounded[currentPosition] = 1
             }
         })
     }
