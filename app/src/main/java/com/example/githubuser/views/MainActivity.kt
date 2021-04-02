@@ -1,4 +1,4 @@
-package com.example.githubuser
+package com.example.githubuser.views
 
 import android.app.SearchManager
 import android.content.Context
@@ -8,14 +8,13 @@ import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.githubuser.adapters.UserAdapter
+import com.example.githubuser.R
 import com.example.githubuser.databinding.ActivityMainBinding
-import com.example.githubuser.models.UserDetail
-import com.example.githubuser.models.Users
+import com.example.githubuser.handlers.RecyclerViewHandler
 import com.example.githubuser.viewmodels.MainViewModel
 import com.example.githubuser.viewmodels.UserListViewModel
 
@@ -24,10 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
     private lateinit var userListViewModel: UserListViewModel
-    private var list = ArrayList<Users>()
-    private var detailList = ArrayList<UserDetail>()
-    private var currentPosition = 0
-    private var isBounded = IntArray(100){0}
+    private var rvHandler = RecyclerViewHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String): Boolean {
                 if (query.isEmpty()) return true
                 true.showLoading()
-                isBounded = IntArray(100){0}
+                rvHandler.isBounded = IntArray(100){0}
                 mainViewModel.setSearchUser(query)
                 return true
             }
@@ -75,16 +71,34 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeViewModel() {
         true.showLoading()
+
         mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
         userListViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(UserListViewModel::class.java)
+
         mainViewModel.getSearchResult().observe(this) {
             if (it.size != 0) {
-                list = it
+                rvHandler.list = it
                 showRecyclerList()
             }
             false.showLoading()
         }
+        userListViewModel.getStatus().observe(this) {
+            it.errorMessage()
+        }
+        mainViewModel.getStatus().observe(this) {
+            it.errorMessage()
+        }
+
         mainViewModel.setSearchUser("salomohutapea")
+    }
+
+    private fun Int.errorMessage() {
+        if (this in 400..598) {
+            Toast.makeText(applicationContext, "$this Cannot fetch data", Toast.LENGTH_SHORT).show()
+        }
+        else if (this == 444) {
+            Toast.makeText(applicationContext, "No connection", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun Boolean.showLoading() {
@@ -96,39 +110,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showRecyclerList() {
-        binding.rvUsers.itemAnimator = null
-        currentPosition = 0
-        binding.rvUsers.layoutManager = LinearLayoutManager(this)
-
-        val listUserAdapter = UserAdapter(list)
-        binding.rvUsers.adapter = listUserAdapter
-
-        listUserAdapter.setOnItemClickCallback(object : UserAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: Users) {
-                val intent = Intent(this@MainActivity, DetailActivity::class.java)
-                intent.putExtra("USERNAME", data.username)
-                startActivity(intent)
-            }
-        })
-
-        userListViewModel.getDetailResult().second.observe(this) {
-            currentPosition = it
+        applicationContext?.let {
+            rvHandler.showRecyclerView(binding.rvUsers, userListViewModel, this, it)
         }
-
-        userListViewModel.getDetailResult().first.observe(this) {
-            list[currentPosition].followers = it.followers
-            list[currentPosition].public_repos = it.public_repos
-            list[currentPosition].following = it.following
-            listUserAdapter.notifyItemChanged(currentPosition)
-        }
-
-        listUserAdapter.setOnItemBoundCallback(object : UserAdapter.OnItemBindCallback {
-            override fun onItemBound(username: String?, position: Int) {
-                if (username != null && isBounded[position] == 0) {
-                    userListViewModel.setDetailUser(username, position)
-                }
-                isBounded[currentPosition] = 1
-            }
-        })
     }
 }

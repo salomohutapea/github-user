@@ -1,4 +1,4 @@
-package com.example.githubuser
+package com.example.githubuser.views
 
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.githubuser.R
 import com.example.githubuser.adapters.PagerAdapter
 import com.example.githubuser.databinding.ActivityDetailBinding
 import com.example.githubuser.models.UserDetail

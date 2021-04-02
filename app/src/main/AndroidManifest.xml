@@ -13,9 +13,9 @@
             android:usesCleartextTraffic="true"
             android:theme="@style/Theme.GithubUser" tools:targetApi="m">
 
-        <activity android:name=".DetailActivity">
+        <activity android:name=".views.DetailActivity">
         </activity>
-        <activity android:name=".MainActivity"
+        <activity android:name=".views.MainActivity"
                   android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

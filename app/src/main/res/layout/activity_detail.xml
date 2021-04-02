@@ -10,7 +10,7 @@
         android:paddingTop="24dp"
         android:orientation="vertical"
         android:gravity="center"
-        tools:context=".DetailActivity">
+        tools:context=".views.DetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_detail_img"

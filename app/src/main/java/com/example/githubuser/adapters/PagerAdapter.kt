@@ -3,7 +3,7 @@ package com.example.githubuser.adapters
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.githubuser.FollowFragment
+import com.example.githubuser.views.FollowFragment
 import com.example.githubuser.models.Users
 
 class PagerAdapter(

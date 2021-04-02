@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.githubuser.NetworkHandler
+import com.example.githubuser.handlers.NetworkHandler
 import com.example.githubuser.models.SearchResponse
 import com.example.githubuser.models.Users
 import retrofit2.Call
@@ -14,6 +14,7 @@ import retrofit2.Response
 class MainViewModel() : ViewModel() {
 
     private val searchResult = MutableLiveData<ArrayList<Users>>()
+    private val status = MutableLiveData<Int>()
 
     fun setSearchUser(username: String) {
         val data = ArrayList<Users>()
@@ -29,10 +30,6 @@ class MainViewModel() : ViewModel() {
                 response: Response<SearchResponse>
             ) {
 
-                if (response.code() in 400..598) {
-                    Log.d("${response.code()} Error", response.toString())
-                }
-
                 response.body()?.items?.forEach {
                     if (it.avatar != null && it.username != null) {
                         data.add(it)
@@ -45,5 +42,9 @@ class MainViewModel() : ViewModel() {
 
     fun getSearchResult(): LiveData<ArrayList<Users>> {
         return searchResult
+    }
+
+    fun getStatus(): LiveData<Int> {
+        return status
     }
 }
