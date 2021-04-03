@@ -14,16 +14,17 @@ class RecyclerViewHandler {
 
     private var currentPosition = 0
     var list = ArrayList<Users>()
-    var isBounded = IntArray(100){0}
+    var isBounded = IntArray(100) { 0 }
 
     fun showRecyclerView(
         recyclerView: RecyclerView,
         viewModel: UserListViewModel,
         owner: LifecycleOwner,
-        context: Context
+        context: Context,
+        token: String
     ) {
         currentPosition = 0
-        isBounded = IntArray(100){0}
+        isBounded = IntArray(100) { 0 }
         recyclerView.itemAnimator = null
 
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -44,7 +45,7 @@ class RecyclerViewHandler {
         listUserAdapter.setOnItemBoundCallback(object : UserAdapter.OnItemBindCallback {
             override fun onItemBound(username: String?, position: Int) {
                 if (username != null && isBounded[position] == 0) {
-                    viewModel.setDetailUser(username, position)
+                    viewModel.setDetailUser(username, position, token)
                 }
                 isBounded[currentPosition] = 1
             }

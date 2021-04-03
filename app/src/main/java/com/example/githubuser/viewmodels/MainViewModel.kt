@@ -16,20 +16,21 @@ class MainViewModel() : ViewModel() {
     private val searchResult = MutableLiveData<ArrayList<Users>>()
     private val status = MutableLiveData<Int>()
 
-    fun setSearchUser(username: String) {
+    fun setSearchUser(username: String, token: String) {
         val data = ArrayList<Users>()
-        NetworkHandler().getService().searchUser(username).enqueue(object :
+        NetworkHandler().getService(token).searchUser(username).enqueue(object :
             Callback<SearchResponse> {
 
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                 Log.d("Request Failed", "Search user")
+                status.postValue(444)
             }
 
             override fun onResponse(
                 call: Call<SearchResponse>,
                 response: Response<SearchResponse>
             ) {
-
+                status.postValue(response.code())
                 response.body()?.items?.forEach {
                     if (it.avatar != null && it.username != null) {
                         data.add(it)

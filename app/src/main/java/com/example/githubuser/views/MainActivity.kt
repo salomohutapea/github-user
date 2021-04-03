@@ -24,12 +24,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var userListViewModel: UserListViewModel
     private var rvHandler = RecyclerViewHandler()
+    private lateinit var token: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Add github token to string resource
+        token = getString(R.string.github_token)
 
         initializeViewModel()
 
@@ -50,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                 if (query.isEmpty()) return true
                 true.showLoading()
                 rvHandler.isBounded = IntArray(100){0}
-                mainViewModel.setSearchUser(query)
+                mainViewModel.setSearchUser(username = query, token = token)
                 return true
             }
 
@@ -75,13 +79,6 @@ class MainActivity : AppCompatActivity() {
         mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
         userListViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(UserListViewModel::class.java)
 
-        mainViewModel.getSearchResult().observe(this) {
-            if (it.size != 0) {
-                rvHandler.list = it
-                showRecyclerList()
-            }
-            false.showLoading()
-        }
         userListViewModel.getStatus().observe(this) {
             it.errorMessage()
         }
@@ -89,15 +86,25 @@ class MainActivity : AppCompatActivity() {
             it.errorMessage()
         }
 
-        mainViewModel.setSearchUser("salomohutapea")
+        mainViewModel.getSearchResult().observe(this) {
+            if (it.size != 0) {
+                rvHandler.list = it
+                showRecyclerList()
+            }
+            false.showLoading()
+        }
+
+        mainViewModel.setSearchUser(username = "salomohutapea", token = token)
     }
 
     private fun Int.errorMessage() {
         if (this in 400..598) {
             Toast.makeText(applicationContext, "$this Cannot fetch data", Toast.LENGTH_SHORT).show()
+            false.showLoading()
         }
         else if (this == 444) {
             Toast.makeText(applicationContext, "No connection", Toast.LENGTH_SHORT).show()
+            false.showLoading()
         }
     }
 
@@ -111,7 +118,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showRecyclerList() {
         applicationContext?.let {
-            rvHandler.showRecyclerView(binding.rvUsers, userListViewModel, this, it)
+            rvHandler.showRecyclerView(binding.rvUsers, userListViewModel, this, it, token)
         }
     }
 }
