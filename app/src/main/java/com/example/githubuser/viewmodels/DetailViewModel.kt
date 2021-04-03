@@ -16,9 +16,10 @@ class DetailViewModel : ViewModel() {
     private val detailResult = MutableLiveData<UserDetail>()
     private val detailFollowers = MutableLiveData<ArrayList<Users>>()
     private val detailFollowing = MutableLiveData<ArrayList<Users>>()
+    private val status = MutableLiveData<Int>()
 
-    fun setDetailUser(username: String) {
-        NetworkHandler().getService().getDetailUser(username).enqueue(object :
+    fun setDetailUser(username: String, token: String) {
+        NetworkHandler().getService(token).getDetailUser(username).enqueue(object :
             Callback<UserDetail> {
 
             override fun onFailure(call: Call<UserDetail>, t: Throwable) {
@@ -29,19 +30,14 @@ class DetailViewModel : ViewModel() {
                 call: Call<UserDetail>,
                 response: Response<UserDetail>
             ) {
-
-                if (response.code() in 400..598) {
-                    Log.d("${response.code()} Error", response.toString());
-                }
-
                 detailResult.postValue(response.body())
             }
         })
     }
 
-    fun setFollowers(username: String) {
+    fun setFollowers(username: String, token: String) {
         val data = ArrayList<Users>()
-        NetworkHandler().getService().getFollowers(username).enqueue(object :
+        NetworkHandler().getService(token).getFollowers(username).enqueue(object :
             Callback<ArrayList<Users>> {
 
             override fun onFailure(call: Call<ArrayList<Users>>, t: Throwable) {
@@ -52,10 +48,6 @@ class DetailViewModel : ViewModel() {
                 call: Call<ArrayList<Users>>,
                 response: Response<ArrayList<Users>>
             ) {
-
-                if (response.code() in 400..598) {
-                    Log.d("${response.code()} Error", response.toString());
-                }
 
                 response.body()?.forEach() {
 
@@ -68,9 +60,9 @@ class DetailViewModel : ViewModel() {
         })
     }
 
-    fun setFollowing(username: String) {
+    fun setFollowing(username: String, token: String) {
         val data = ArrayList<Users>()
-        NetworkHandler().getService().getFollowing(username).enqueue(object :
+        NetworkHandler().getService(token).getFollowing(username).enqueue(object :
             Callback<ArrayList<Users>> {
 
             override fun onFailure(call: Call<ArrayList<Users>>, t: Throwable) {
@@ -81,11 +73,6 @@ class DetailViewModel : ViewModel() {
                 call: Call<ArrayList<Users>>,
                 response: Response<ArrayList<Users>>
             ) {
-
-                if (response.code() in 400..598) {
-                    Log.d("${response.code()} Error", response.toString());
-                }
-
                 response.body()?.forEach() {
 
                     if (it.avatar != null && it.username != null) {
@@ -107,5 +94,9 @@ class DetailViewModel : ViewModel() {
 
     fun getFollowing(): LiveData<ArrayList<Users>> {
         return detailFollowing
+    }
+
+    fun getStatus(): LiveData<Int> {
+        return status
     }
 }

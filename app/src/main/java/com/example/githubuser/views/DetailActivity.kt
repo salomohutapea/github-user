@@ -1,7 +1,6 @@
 package com.example.githubuser.views
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -21,17 +20,21 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
     private lateinit var detailViewModel: DetailViewModel
-    private var flag: Int = 0
-    private var maxFlag: Int = 0
-    private var following = ArrayList<Users>()
-    private var followers = ArrayList<Users>()
     private lateinit var viewPager: ViewPager2
     private lateinit var tabs: TabLayout
+    private lateinit var token: String
+    private lateinit var pagerAdapter: PagerAdapter
+    private var following = ArrayList<Users>()
+    private var followers = ArrayList<Users>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Add github token to string resource
+        token = getString(R.string.github_token)
+
 
         viewPager = findViewById(R.id.view_pager)
         tabs = findViewById(R.id.tabs)
@@ -42,50 +45,36 @@ class DetailActivity : AppCompatActivity() {
             ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(DetailViewModel::class.java)
 
         true.showLoading()
-        detailViewModel.setDetailUser(username)
-        detailViewModel.setFollowers(username)
-        detailViewModel.setFollowing(username)
+        detailViewModel.setDetailUser(username, token)
+        detailViewModel.setFollowers(username, token)
+        detailViewModel.setFollowing(username, token)
 
         detailViewModel.getSearchResult().observe(this) { data ->
-            flag++
-
-            maxFlag = if(data.followers == "0" && data.following == "0") {
-                1
-            } else if((data.followers == "0" && data.following != "0") || (data.followers != "0" && data.following == "0")) {
-                2
-            } else {
-                3
-            }
-            Log.d("MAXFLAGABC", maxFlag.toString())
             updateView(data)
             false.showLoading()
         }
 
-        detailViewModel.getFollowing().observe(this) { data ->
-            flag++
-            following = data
+        detailViewModel.getFollowing().observe(this) {
+            following = it
             displayPager()
         }
-        detailViewModel.getFollowers().observe(this) { data ->
-            flag++
-            followers = data
+        detailViewModel.getFollowers().observe(this) {
+            followers = it
             displayPager()
         }
 
     }
 
     private fun displayPager() {
-        if (flag == maxFlag) {
-            val pagerAdapter = PagerAdapter(this, following, followers)
-            viewPager.adapter = pagerAdapter
-            TabLayoutMediator(tabs, viewPager) { tab, position ->
-                when (position) {
-                    0 -> tab.text = "Following"
-                    1 -> tab.text = "Followers"
-                }
-            }.attach()
-            supportActionBar?.elevation = 0f
-        } else return
+        pagerAdapter = PagerAdapter(this, following, followers)
+        viewPager.adapter = pagerAdapter
+        TabLayoutMediator(tabs, viewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = "Following"
+                1 -> tab.text = "Followers"
+            }
+        }.attach()
+        supportActionBar?.elevation = 0f
     }
 
     private fun updateView(data: UserDetail) {

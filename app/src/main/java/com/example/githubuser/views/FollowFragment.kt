@@ -19,6 +19,7 @@ class FollowFragment : Fragment() {
     private lateinit var userListViewModel: UserListViewModel
     private lateinit var rvFollow: RecyclerView
     private var rvHandler = RecyclerViewHandler()
+    private lateinit var token: String
 
     companion object {
         private const val ARG_SECTION_NUMBER = "section_number"
@@ -40,6 +41,10 @@ class FollowFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        // Add github token to string resource
+        token = getString(R.string.github_token)
+
         detailViewModel =
             ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(DetailViewModel::class.java)
         userListViewModel =
@@ -63,7 +68,7 @@ class FollowFragment : Fragment() {
             rvHandler.list = arguments?.getSerializable(FOLLOWERS) as ArrayList<Users>
 
         context?.let {
-            rvHandler.showRecyclerView(rvFollow, userListViewModel, this, it)
+            rvHandler.showRecyclerView(rvFollow, userListViewModel, this, it, token)
         }
 
     }

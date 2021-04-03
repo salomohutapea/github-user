@@ -16,8 +16,8 @@ class UserListViewModel : ViewModel() {
     private val currentPosition = MutableLiveData<Int>()
     private val status = MutableLiveData<Int>()
 
-    fun setDetailUser(username: String, position: Int) {
-        NetworkHandler().getService().getDetailUser(username).enqueue(object :
+    fun setDetailUser(username: String, position: Int, token: String) {
+        NetworkHandler().getService(token).getDetailUser(username).enqueue(object :
             Callback<UserDetail> {
 
             override fun onFailure(call: Call<UserDetail>, t: Throwable) {
@@ -31,10 +31,6 @@ class UserListViewModel : ViewModel() {
             ) {
 
                 status.postValue(response.code())
-
-                if (response.code() in 400..598) {
-                    Log.d("${response.code()} Error", response.toString());
-                }
 
                 currentPosition.postValue(position)
                 detailResult.postValue(response.body())
