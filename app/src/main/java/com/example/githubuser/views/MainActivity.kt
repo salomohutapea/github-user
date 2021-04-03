@@ -8,12 +8,12 @@ import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.example.githubuser.R
 import com.example.githubuser.databinding.ActivityMainBinding
+import com.example.githubuser.handlers.ErrorHandler
 import com.example.githubuser.handlers.RecyclerViewHandler
 import com.example.githubuser.viewmodels.MainViewModel
 import com.example.githubuser.viewmodels.UserListViewModel
@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var userListViewModel: UserListViewModel
     private var rvHandler = RecyclerViewHandler()
+    private var errHandler = ErrorHandler()
     private lateinit var token: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,10 +81,12 @@ class MainActivity : AppCompatActivity() {
         userListViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(UserListViewModel::class.java)
 
         userListViewModel.getStatus().observe(this) {
-            it.errorMessage()
+            applicationContext?.let { context -> errHandler.errorMessage(it, context) }
+            false.showLoading()
         }
         mainViewModel.getStatus().observe(this) {
-            it.errorMessage()
+            applicationContext?.let { context -> errHandler.errorMessage(it, context) }
+            false.showLoading()
         }
 
         mainViewModel.getSearchResult().observe(this) {
@@ -95,17 +98,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainViewModel.setSearchUser(username = "salomohutapea", token = token)
-    }
-
-    private fun Int.errorMessage() {
-        if (this in 400..598) {
-            Toast.makeText(applicationContext, "$this Cannot fetch data", Toast.LENGTH_SHORT).show()
-            false.showLoading()
-        }
-        else if (this == 444) {
-            Toast.makeText(applicationContext, "No connection", Toast.LENGTH_SHORT).show()
-            false.showLoading()
-        }
     }
 
     private fun Boolean.showLoading() {

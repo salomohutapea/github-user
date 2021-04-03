@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.githubuser.R
 import com.example.githubuser.adapters.PagerAdapter
 import com.example.githubuser.databinding.ActivityDetailBinding
+import com.example.githubuser.handlers.ErrorHandler
 import com.example.githubuser.models.UserDetail
 import com.example.githubuser.models.Users
 import com.example.githubuser.viewmodels.DetailViewModel
@@ -48,6 +49,10 @@ class DetailActivity : AppCompatActivity() {
         detailViewModel.setDetailUser(username, token)
         detailViewModel.setFollowers(username, token)
         detailViewModel.setFollowing(username, token)
+
+        detailViewModel.getStatus().observe(this) {
+            applicationContext?.let { context -> ErrorHandler().errorMessage(it, context) }
+        }
 
         detailViewModel.getSearchResult().observe(this) { data ->
             updateView(data)

@@ -8,14 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubuser.R
+import com.example.githubuser.handlers.ErrorHandler
 import com.example.githubuser.handlers.RecyclerViewHandler
 import com.example.githubuser.models.Users
-import com.example.githubuser.viewmodels.DetailViewModel
 import com.example.githubuser.viewmodels.UserListViewModel
 
 class FollowFragment : Fragment() {
 
-    private lateinit var detailViewModel: DetailViewModel
     private lateinit var userListViewModel: UserListViewModel
     private lateinit var rvFollow: RecyclerView
     private var rvHandler = RecyclerViewHandler()
@@ -45,10 +44,11 @@ class FollowFragment : Fragment() {
         // Add github token to string resource
         token = getString(R.string.github_token)
 
-        detailViewModel =
-            ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(DetailViewModel::class.java)
         userListViewModel =
             ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(UserListViewModel::class.java)
+        userListViewModel.getStatus().observe(this) {
+            context?.let { context -> ErrorHandler().errorMessage(it, context) }
+        }
         return inflater.inflate(R.layout.fragment_follow, container, false)
     }
 
@@ -59,7 +59,6 @@ class FollowFragment : Fragment() {
     }
 
     private fun showRecyclerList() {
-
         val index = arguments?.getInt(ARG_SECTION_NUMBER, 0)
 
         if (index == 1)
@@ -70,6 +69,6 @@ class FollowFragment : Fragment() {
         context?.let {
             rvHandler.showRecyclerView(rvFollow, userListViewModel, this, it, token)
         }
-
     }
+
 }
