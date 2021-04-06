@@ -42,9 +42,6 @@ interface ServiceApiCall {
     @GET("search/users")
     fun searchUser(@Query("q") username: String): Call<SearchResponse>
 
-    @GET("search/users")
-    fun searchUserPaged(@Query("q") username: String, @Query("page") page: String): Call<SearchResponse>
-
     @GET("users/{username}")
     fun getDetailUser(@Path("username") username: String): Call<UserDetail>
 

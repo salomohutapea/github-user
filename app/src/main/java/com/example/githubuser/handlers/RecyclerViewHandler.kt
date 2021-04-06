@@ -2,7 +2,6 @@ package com.example.githubuser.handlers
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,7 +36,6 @@ class RecyclerViewHandler {
         }
 
         viewModel.getDetailResult().first.observe(owner) {
-            Log.d("NOTIFY1ITEM", list.toString())
             it.forEachIndexed { i, user ->
                 list[i].followers = user.followers
                 list[i].following = user.following

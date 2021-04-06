@@ -20,6 +20,9 @@ class UserListViewModel : ViewModel() {
 
     fun setDetailUser(users: ArrayList<Users>, token: String) {
         val listDetail = ArrayList<UserDetail>()
+        currentPosition.postValue(0)
+        if (users.size == 0)
+            isLoading.postValue(false)
         users.forEachIndexed { i, user ->
             user.username?.let {
                 NetworkHandler().getService(token).getDetailUser(it).enqueue(object :
@@ -38,6 +41,7 @@ class UserListViewModel : ViewModel() {
                         status.postValue(response.code())
                         currentPosition.postValue(i)
                         detailResult.postValue(listDetail)
+                        Log.d("USERDDETAIL1", response.body().toString())
                         if (listDetail.size == users.size) {
                             isLoading.postValue(false)
                         }

@@ -98,8 +98,6 @@ class MainActivity : AppCompatActivity() {
         userListViewModel.getLoading().observe(this) {
             showLoading(it)
         }
-
-
         mainViewModel.setSearchUser(username = "salomohutapea", token = token)
     }
 

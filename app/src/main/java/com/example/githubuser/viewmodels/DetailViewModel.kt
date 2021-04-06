@@ -24,12 +24,14 @@ class DetailViewModel : ViewModel() {
 
             override fun onFailure(call: Call<UserDetail>, t: Throwable) {
                 Log.d("Request Failed", "Search user")
+                status.postValue(444)
             }
 
             override fun onResponse(
                 call: Call<UserDetail>,
                 response: Response<UserDetail>
             ) {
+                status.postValue(response.code())
                 detailResult.postValue(response.body())
             }
         })
@@ -42,19 +44,20 @@ class DetailViewModel : ViewModel() {
 
             override fun onFailure(call: Call<ArrayList<Users>>, t: Throwable) {
                 Log.d("Request Failed", "Get followers")
+                status.postValue(444)
             }
 
             override fun onResponse(
                 call: Call<ArrayList<Users>>,
                 response: Response<ArrayList<Users>>
             ) {
-
                 response.body()?.forEach() {
 
                     if (it.avatar != null && it.username != null) {
                         data.add(it)
                     }
                 }
+                status.postValue(response.code())
                 detailFollowers.postValue(data)
             }
         })
@@ -67,6 +70,7 @@ class DetailViewModel : ViewModel() {
 
             override fun onFailure(call: Call<ArrayList<Users>>, t: Throwable) {
                 Log.d("Request Failed", "Get following")
+                status.postValue(444)
             }
 
             override fun onResponse(
@@ -74,11 +78,11 @@ class DetailViewModel : ViewModel() {
                 response: Response<ArrayList<Users>>
             ) {
                 response.body()?.forEach() {
-
                     if (it.avatar != null && it.username != null) {
                         data.add(it)
                     }
                 }
+                status.postValue(response.code())
                 detailFollowing.postValue(data)
             }
         })
