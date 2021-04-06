@@ -11,19 +11,16 @@ import com.example.githubuser.models.Users
 
 class UserAdapter(private val listUser: ArrayList<Users>) : RecyclerView.Adapter<UserAdapter.ListViewHolder>() {
     private lateinit var onItemClickCallback: OnItemClickCallback
-    private lateinit var onItemBindCallback: OnItemBindCallback
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
-    fun setOnItemBoundCallback(onItemBoundCallback: OnItemBindCallback) {
-        this.onItemBindCallback = onItemBoundCallback
-    }
-
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ListViewHolder {
         val view: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_row_users, viewGroup, false)
-        return ListViewHolder(view)
+        val holder = ListViewHolder(view)
+        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listUser[holder.adapterPosition]) }
+        return holder
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
@@ -35,8 +32,6 @@ class UserAdapter(private val listUser: ArrayList<Users>) : RecyclerView.Adapter
         holder.binding.singleRepoUser.text = user.public_repos
         holder.binding.singleTvFollowers.text = user.followers
         holder.binding.singleTvFollowing.text = user.following
-        onItemBindCallback.onItemBound(user.username, holder.adapterPosition)
-        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listUser[holder.adapterPosition]) }
     }
 
     override fun getItemCount(): Int {
@@ -49,9 +44,5 @@ class UserAdapter(private val listUser: ArrayList<Users>) : RecyclerView.Adapter
 
     interface OnItemClickCallback {
         fun onItemClicked(data: Users)
-    }
-
-    interface OnItemBindCallback {
-        fun onItemBound(username: String?, position: Int)
     }
 }

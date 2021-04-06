@@ -41,6 +41,32 @@ class MainViewModel() : ViewModel() {
         })
     }
 
+    // Overloading method
+    fun setSearchUser(username: String, token: String, page: String) {
+        val data = ArrayList<Users>()
+        NetworkHandler().getService(token).searchUserPaged(username, page).enqueue(object :
+            Callback<SearchResponse> {
+
+            override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                Log.d("Request Failed", "Search user")
+                status.postValue(444)
+            }
+
+            override fun onResponse(
+                call: Call<SearchResponse>,
+                response: Response<SearchResponse>
+            ) {
+                status.postValue(response.code())
+                response.body()?.items?.forEach {
+                    if (it.avatar != null && it.username != null) {
+                        data.add(it)
+                    }
+                }
+                searchResult.postValue(data)
+            }
+        })
+    }
+
     fun getSearchResult(): LiveData<ArrayList<Users>> {
         return searchResult
     }

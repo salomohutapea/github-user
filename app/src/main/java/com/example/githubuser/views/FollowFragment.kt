@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubuser.R
+import com.example.githubuser.databinding.FragmentFollowBinding
 import com.example.githubuser.handlers.ErrorHandler
 import com.example.githubuser.handlers.RecyclerViewHandler
 import com.example.githubuser.models.Users
@@ -17,6 +18,7 @@ class FollowFragment : Fragment() {
 
     private lateinit var userListViewModel: UserListViewModel
     private lateinit var rvFollow: RecyclerView
+    private lateinit var binding: FragmentFollowBinding
     private var rvHandler = RecyclerViewHandler()
     private lateinit var token: String
 
@@ -39,7 +41,9 @@ class FollowFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+
+        binding = FragmentFollowBinding.inflate(inflater, container, false)
 
         // Add github token to string resource
         token = getString(R.string.github_token)
@@ -49,7 +53,10 @@ class FollowFragment : Fragment() {
         userListViewModel.getStatus().observe(this) {
             context?.let { context -> ErrorHandler().errorMessage(it, context) }
         }
-        return inflater.inflate(R.layout.fragment_follow, container, false)
+        userListViewModel.getLoading().observe(this) {
+            showLoading(it)
+        }
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,6 +75,16 @@ class FollowFragment : Fragment() {
 
         context?.let {
             rvHandler.showRecyclerView(rvFollow, userListViewModel, this, it, token)
+        }
+    }
+
+    private fun showLoading(loading: Boolean) {
+        if (loading) {
+            binding.rvFollow.visibility = View.GONE
+            binding.progressFragment.visibility = View.VISIBLE
+        } else {
+            binding.progressFragment.visibility = View.GONE
+            binding.rvFollow.visibility = View.VISIBLE
         }
     }
 

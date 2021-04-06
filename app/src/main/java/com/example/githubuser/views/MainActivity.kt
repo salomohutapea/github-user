@@ -33,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        showLoading(true)
+
         // Add github token to string resource
         token = getString(R.string.github_token)
 
@@ -53,8 +55,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onQueryTextSubmit(query: String): Boolean {
                 if (query.isEmpty()) return true
-                true.showLoading()
-                rvHandler.isBounded = IntArray(100){0}
+                showLoading(true)
                 mainViewModel.setSearchUser(username = query, token = token)
                 return true
             }
@@ -75,18 +76,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializeViewModel() {
-        true.showLoading()
 
         mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
         userListViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(UserListViewModel::class.java)
 
         userListViewModel.getStatus().observe(this) {
             applicationContext?.let { context -> errHandler.errorMessage(it, context) }
-            false.showLoading()
         }
+
         mainViewModel.getStatus().observe(this) {
             applicationContext?.let { context -> errHandler.errorMessage(it, context) }
-            false.showLoading()
         }
 
         mainViewModel.getSearchResult().observe(this) {
@@ -94,17 +93,23 @@ class MainActivity : AppCompatActivity() {
                 rvHandler.list = it
                 showRecyclerList()
             }
-            false.showLoading()
         }
+
+        userListViewModel.getLoading().observe(this) {
+            showLoading(it)
+        }
+
 
         mainViewModel.setSearchUser(username = "salomohutapea", token = token)
     }
 
-    private fun Boolean.showLoading() {
-        if (this) {
+    private fun showLoading(loading: Boolean) {
+        if (loading) {
+            binding.rvUsers.visibility = View.GONE
             binding.progressBar.visibility = View.VISIBLE
         } else {
             binding.progressBar.visibility = View.GONE
+            binding.rvUsers.visibility = View.VISIBLE
         }
     }
 

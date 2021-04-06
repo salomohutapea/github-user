@@ -27,15 +27,17 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var pagerAdapter: PagerAdapter
     private var following = ArrayList<Users>()
     private var followers = ArrayList<Users>()
+    private var flag = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        true.showLoading()
+
         // Add github token to string resource
         token = getString(R.string.github_token)
-
 
         viewPager = findViewById(R.id.view_pager)
         tabs = findViewById(R.id.tabs)
@@ -45,7 +47,6 @@ class DetailActivity : AppCompatActivity() {
         detailViewModel =
             ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(DetailViewModel::class.java)
 
-        true.showLoading()
         detailViewModel.setDetailUser(username, token)
         detailViewModel.setFollowers(username, token)
         detailViewModel.setFollowing(username, token)
@@ -56,21 +57,25 @@ class DetailActivity : AppCompatActivity() {
 
         detailViewModel.getSearchResult().observe(this) { data ->
             updateView(data)
-            false.showLoading()
+            flag++
         }
 
         detailViewModel.getFollowing().observe(this) {
             following = it
-            displayPager()
+            if(it.size != 0)
+                displayPager()
         }
         detailViewModel.getFollowers().observe(this) {
             followers = it
-            displayPager()
+            if(it.size != 0)
+                displayPager()
         }
 
     }
 
     private fun displayPager() {
+        flag++
+        supportActionBar?.elevation = 0f
         pagerAdapter = PagerAdapter(this, following, followers)
         viewPager.adapter = pagerAdapter
         TabLayoutMediator(tabs, viewPager) { tab, position ->
@@ -79,7 +84,13 @@ class DetailActivity : AppCompatActivity() {
                 1 -> tab.text = "Followers"
             }
         }.attach()
-        supportActionBar?.elevation = 0f
+
+        if (flag == 3 && followers.size != 0 && following.size != 0)
+            false.showLoading()
+        else if (flag == 2 && (followers.size == 0 || following.size == 0))
+            false.showLoading()
+        else if (flag == 1 && followers.size == 0 && following.size == 0)
+            false.showLoading()
     }
 
     private fun updateView(data: UserDetail) {
@@ -97,10 +108,10 @@ class DetailActivity : AppCompatActivity() {
 
     private fun Boolean.showLoading() {
         if (this) {
-            binding.progressBar.visibility = View.VISIBLE
+            binding.progressDetail.visibility = View.VISIBLE
             binding.constraintDetailAll.visibility = View.GONE
         } else {
-            binding.progressBar.visibility = View.GONE
+            binding.progressDetail.visibility = View.GONE
             binding.constraintDetailAll.visibility = View.VISIBLE
         }
     }
