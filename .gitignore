@@ -8,4 +8,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/app/src/main/res/values/github_token.xml
 /app/src/main/res/values/map_api.xml
