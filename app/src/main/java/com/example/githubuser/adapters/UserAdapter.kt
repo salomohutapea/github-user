@@ -19,7 +19,7 @@ class UserAdapter(private val listUser: ArrayList<Users>) : RecyclerView.Adapter
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ListViewHolder {
         val view: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_row_users, viewGroup, false)
         val holder = ListViewHolder(view)
-        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listUser[holder.adapterPosition]) }
+        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(listUser[holder.absoluteAdapterPosition]) }
         return holder
     }
 
