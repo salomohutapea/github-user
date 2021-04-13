@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Github User</string>
+    <string name="app_name">Consumer App</string>
     <string name="user_1">User 1</string>
     <string name="dash">-</string>
     <string name="user1">\@user1</string>
@@ -30,6 +31,7 @@
     <string name="added_fav">Added to favorite</string>
     <string name="deleted_fav">Deleted from favorite</string>
     <string name="no_favorite">There is no favorite user</string>
+    <string name="consumer_app">Consumer App</string>
 </resources>
 
 

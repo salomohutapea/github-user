@@ -1,29 +1,30 @@
-package com.example.githubuser.views
+package com.example.consumerapp.views
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.githubuser.R
-import com.example.githubuser.databinding.ActivityFavoriteBinding
-import com.example.githubuser.handlers.ListHandler
-import com.example.githubuser.viewmodels.FavoriteViewModel
+import com.example.consumerapp.R
+import com.example.consumerapp.databinding.ActivityMainBinding
+import com.example.consumerapp.handlers.ListHandler
+import com.example.consumerapp.viewmodels.FavoriteViewModel
 import com.google.android.material.snackbar.Snackbar
 
-class FavoriteActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityFavoriteBinding
+    private lateinit var binding: ActivityMainBinding
     private var rvHandler = ListHandler()
     private lateinit var favViewModel: FavoriteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFavoriteBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.title = getString(R.string.favorite_user)
+        supportActionBar?.title = getString(R.string.consumer_app)
 
         favViewModel =
             ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(FavoriteViewModel::class.java)
 
+        favViewModel.loadFav(this)
         favViewModel.getDbReadResult().observe(this) { favorites ->
             if (favorites.size > 0) {
                 applicationContext?.let {
@@ -33,22 +34,11 @@ class FavoriteActivity : AppCompatActivity() {
                 showSnackBarMessage(getString(R.string.no_favorite))
             }
         }
-
-//        val handlerThread = HandlerThread("DataObserver")
-//        handlerThread.start()
-//        val handler = Handler(handlerThread.looper)
-//
-//        val myObserver = object : ContentObserver(handler) {
-//            override fun onChange(self: Boolean) {
-//                favViewModel.loadFavoritesAsync(applicationContext)
-//            }
-//        }
-//        contentResolver.registerContentObserver(CONTENT_URI, true, myObserver)
     }
 
     override fun onResume() {
         super.onResume()
-        favViewModel.loadFavoritesAsync(this)
+        favViewModel.loadFav(this)
     }
 
     private fun showSnackBarMessage(message: String) {

@@ -1,4 +1,4 @@
-package com.example.githubuser.db
+package com.example.consumerapp.db
 
 import android.net.Uri
 import android.provider.BaseColumns

@@ -1,7 +1,7 @@
-package com.example.githubuser.db
+package com.example.consumerapp.db
 
 import android.database.Cursor
-import com.example.githubuser.models.UserDetail
+import com.example.consumerapp.models.UserDetail
 
 object MappingHelper {
 

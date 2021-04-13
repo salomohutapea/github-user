@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Pengguna GitHub</string>
+    <string name="app_name">Aplikasi Konsumer</string>
     <string name="user_1">Pengguna 1</string>
     <string name="dash">-</string>
     <string name="user1">\@pengguna1</string>s
@@ -31,4 +31,5 @@
     <string name="added_fav">Ditambah ke favorit</string>
     <string name="deleted_fav">Terhapus dari favorite</string>
     <string name="no_favorite">Tidak ada pengguna favorit</string>
+    <string name="consumer_app">Aplikasi Konsumer</string>
 </resources>

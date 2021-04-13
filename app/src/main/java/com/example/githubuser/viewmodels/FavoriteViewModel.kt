@@ -20,6 +20,7 @@ class FavoriteViewModel : ViewModel() {
 
     fun loadFavoritesAsync(context: Context) {
         isLoading.postValue(true)
+
         GlobalScope.launch(Dispatchers.Main) {
             val favoriteHelper = FavoriteHelper.getInstance(context)
             favoriteHelper.open()
@@ -33,6 +34,7 @@ class FavoriteViewModel : ViewModel() {
             favoriteHelper.close()
             isLoading.postValue(false)
         }
+
     }
 
     fun deleteFavorite(context: Context, id: String, position: Int) {
