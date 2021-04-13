@@ -1,4 +1,4 @@
-package com.example.githubuser.handlers
+package com.example.githubuser.helpers
 
 import android.content.Context
 import android.widget.Toast

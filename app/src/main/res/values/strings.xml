@@ -30,6 +30,16 @@
     <string name="added_fav">Added to favorite</string>
     <string name="deleted_fav">Deleted from favorite</string>
     <string name="no_favorite">There is no favorite user</string>
+    <string name="reminder">Reminder</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="github_reminder">Github Reminder</string>
+    <string name="reminder_content">Let\'s see who follows you</string>
+    <string name="repeat_alarm">Repeating alarm set</string>
+    <string name="cancel_repeat_alarm">Repeating alarm cancelled</string>
+    <string name="nine">09:00</string>
+    <string name="repeating_alarm">Repeating alarm</string>
+    <string name="settings">Settings</string>
 </resources>
 
 

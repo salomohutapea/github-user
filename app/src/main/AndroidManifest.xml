@@ -4,8 +4,13 @@
           package="com.example.githubuser">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <permission android:name="com.example.githubuser.READ_DATABASE" android:protectionLevel="normal"/>
-    <permission android:name="com.example.githubuser.WRITE_DATABASE" android:protectionLevel="normal"/>
+
+    <permission
+        android:name="com.example.githubuser.READ_DATABASE"
+        android:protectionLevel="normal"/>
+    <permission
+        android:name="com.example.githubuser.WRITE_DATABASE"
+        android:protectionLevel="normal"/>
 
     <application
         android:allowBackup="true"
@@ -16,14 +21,23 @@
         android:theme="@style/Theme.GithubUser"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+
+        <activity android:name=".views.SettingsActivity">
+        </activity>
+
         <provider
             android:name=".db.FavoriteProvider"
             android:authorities="com.example.githubuser"
             android:enabled="true"
+            android:exported="true"
             android:readPermission="com.example.githubuser.READ_DATABASE"
-            android:writePermission="com.example.githubuser.WRITE_DATABASE"
-            android:exported="true">
+            android:writePermission="com.example.githubuser.WRITE_DATABASE">
         </provider>
+
+        <receiver
+            android:name=".helpers.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity android:name=".views.FavoriteActivity">
         </activity>

@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
-import android.util.Log
 import com.example.githubuser.db.DatabaseContract.FavoriteColumns.Companion.CONTENT_URI
 import com.example.githubuser.db.DatabaseContract.FavoriteColumns.Companion.TABLE_NAME
 
@@ -65,7 +64,6 @@ class FavoriteProvider : ContentProvider() {
             sUriMatcher.match(uri) -> favHelper.deleteById(uri.lastPathSegment.toString())
             else -> 0
         }
-        Log.d("SUCCESS", "heloo")
 
         context?.contentResolver?.notifyChange(CONTENT_URI, null)
 

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.githubuser.R
 import com.example.githubuser.databinding.ActivityFavoriteBinding
-import com.example.githubuser.handlers.ListHandler
+import com.example.githubuser.helpers.ListHandler
 import com.example.githubuser.viewmodels.FavoriteViewModel
 import com.google.android.material.snackbar.Snackbar
 
@@ -33,17 +33,6 @@ class FavoriteActivity : AppCompatActivity() {
                 showSnackBarMessage(getString(R.string.no_favorite))
             }
         }
-
-//        val handlerThread = HandlerThread("DataObserver")
-//        handlerThread.start()
-//        val handler = Handler(handlerThread.looper)
-//
-//        val myObserver = object : ContentObserver(handler) {
-//            override fun onChange(self: Boolean) {
-//                favViewModel.loadFavoritesAsync(applicationContext)
-//            }
-//        }
-//        contentResolver.registerContentObserver(CONTENT_URI, true, myObserver)
     }
 
     override fun onResume() {

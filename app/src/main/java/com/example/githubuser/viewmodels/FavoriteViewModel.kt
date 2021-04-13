@@ -1,7 +1,6 @@
 package com.example.githubuser.viewmodels
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,7 +29,6 @@ class FavoriteViewModel : ViewModel() {
             }
             val favorites = deferredFavorites.await()
             dbReadResult.postValue(favorites)
-            Log.d("DBREAD", favorites.toString())
             favoriteHelper.close()
             isLoading.postValue(false)
         }
@@ -51,9 +49,5 @@ class FavoriteViewModel : ViewModel() {
 
     fun getStatus(): LiveData<Int> {
         return status
-    }
-
-    fun getIsLoading(): LiveData<Boolean> {
-        return isLoading
     }
 }

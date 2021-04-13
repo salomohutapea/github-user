@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.githubuser.R
 import com.example.githubuser.adapters.PagerAdapter
 import com.example.githubuser.databinding.ActivityDetailBinding
-import com.example.githubuser.handlers.ErrorHandler
+import com.example.githubuser.helpers.ErrorHandler
 import com.example.githubuser.models.UserDetail
 import com.example.githubuser.models.Users
 import com.example.githubuser.viewmodels.DetailViewModel

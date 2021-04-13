@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubuser.R
 import com.example.githubuser.databinding.FragmentFollowBinding
-import com.example.githubuser.handlers.ErrorHandler
-import com.example.githubuser.handlers.ListHandler
+import com.example.githubuser.helpers.ErrorHandler
+import com.example.githubuser.helpers.ListHandler
 import com.example.githubuser.models.Users
 import com.example.githubuser.viewmodels.UserListViewModel
 

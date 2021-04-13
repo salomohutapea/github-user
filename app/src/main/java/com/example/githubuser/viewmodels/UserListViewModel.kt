@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.githubuser.handlers.NetworkHandler
+import com.example.githubuser.helpers.NetworkHandler
 import com.example.githubuser.models.UserDetail
 import com.example.githubuser.models.Users
 import retrofit2.Call

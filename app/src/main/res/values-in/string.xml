@@ -31,4 +31,14 @@
     <string name="added_fav">Ditambah ke favorit</string>
     <string name="deleted_fav">Terhapus dari favorite</string>
     <string name="no_favorite">Tidak ada pengguna favorit</string>
+    <string name="reminder">Pengingat</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="github_reminder">Pengingat Github</string>
+    <string name="reminder_content">Lihat siapa saja yang mengikutimu</string>
+    <string name="repeat_alarm">Alarm berulang dihidupkan</string>
+    <string name="cancel_repeat_alarm">Alarm berulang dibatalkan</string>
+    <string name="nine">09.00</string>
+    <string name="repeating_alarm">Alarm berulang</string>
+    <string name="settings">Pengaturan</string>
 </resources>

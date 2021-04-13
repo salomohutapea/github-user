@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.example.githubuser.R
 import com.example.githubuser.db.DatabaseContract
 import com.example.githubuser.db.FavoriteHelper
-import com.example.githubuser.handlers.NetworkHandler
+import com.example.githubuser.helpers.NetworkHandler
 import com.example.githubuser.models.UserDetail
 import com.example.githubuser.models.Users
 import retrofit2.Call

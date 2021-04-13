@@ -4,7 +4,6 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -13,8 +12,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.example.githubuser.R
 import com.example.githubuser.databinding.ActivityMainBinding
-import com.example.githubuser.handlers.ErrorHandler
-import com.example.githubuser.handlers.ListHandler
+import com.example.githubuser.helpers.ErrorHandler
+import com.example.githubuser.helpers.ListHandler
 import com.example.githubuser.viewmodels.MainViewModel
 import com.example.githubuser.viewmodels.UserListViewModel
 
@@ -68,9 +67,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_change_settings) {
-            val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
-            startActivity(mIntent)
+        if (item.itemId == R.id.settings) {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         } else if (item.itemId == R.id.favorite) {
             val intent = Intent(this, FavoriteActivity::class.java)
             startActivity(intent)

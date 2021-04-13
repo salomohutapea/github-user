@@ -13,7 +13,8 @@
         android:title="@string/show_favorite_users"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/action_change_settings"
-        android:title="@string/change_language_settings"
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_baseline_app_settings_alt_24"
+        android:title="@string/settings"
         app:showAsAction="ifRoom"/>
 </menu>

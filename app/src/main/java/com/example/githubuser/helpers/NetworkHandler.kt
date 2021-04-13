@@ -1,4 +1,4 @@
-package com.example.githubuser.handlers
+package com.example.githubuser.helpers
 
 import com.example.githubuser.models.SearchResponse
 import com.example.githubuser.models.UserDetail
