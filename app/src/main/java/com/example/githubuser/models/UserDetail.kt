@@ -27,5 +27,7 @@ data class UserDetail(
     val company: String? = null,
 
     @field:SerializedName("public_repos")
-    val public_repos: String? = "0"
+    val public_repos: String? = "0",
+
+    val _ID: String = "0"
 ) : Serializable

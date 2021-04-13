@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.githubuser.R
 import com.example.githubuser.databinding.ActivityMainBinding
 import com.example.githubuser.handlers.ErrorHandler
-import com.example.githubuser.handlers.RecyclerViewHandler
+import com.example.githubuser.handlers.ListHandler
 import com.example.githubuser.viewmodels.MainViewModel
 import com.example.githubuser.viewmodels.UserListViewModel
 
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
     private lateinit var userListViewModel: UserListViewModel
-    private var rvHandler = RecyclerViewHandler()
+    private var rvHandler = ListHandler()
     private var errHandler = ErrorHandler()
     private lateinit var token: String
 
@@ -71,6 +71,9 @@ class MainActivity : AppCompatActivity() {
         if (item.itemId == R.id.action_change_settings) {
             val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
             startActivity(mIntent)
+        } else if (item.itemId == R.id.favorite) {
+            val intent = Intent(this, FavoriteActivity::class.java)
+            startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -78,7 +81,8 @@ class MainActivity : AppCompatActivity() {
     private fun initializeViewModel() {
 
         mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
-        userListViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(UserListViewModel::class.java)
+        userListViewModel =
+            ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(UserListViewModel::class.java)
 
         userListViewModel.getStatus().observe(this) {
             applicationContext?.let { context -> errHandler.errorMessage(it, context) }
@@ -113,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showRecyclerList() {
         applicationContext?.let {
-            rvHandler.showRecyclerView(binding.rvUsers, userListViewModel, this, it, token)
+            rvHandler.showUserRecyclerView(binding.rvUsers, userListViewModel, this, it, token)
         }
     }
 }

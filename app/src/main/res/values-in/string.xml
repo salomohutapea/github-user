@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Pengguna GitHub</string>
-    <string name="user_1">User 1</string>
+    <string name="user_1">Pengguna 1</string>
     <string name="dash">-</string>
     <string name="user1">\@pengguna1</string>s
     <string name="repository">Repository</string>
@@ -17,7 +17,17 @@
     <string name="search">Pencarian</string>
     <string name="search_hint">username</string>
     <string name="show_more">Tampilkan lebih</string>
-    <string name="user_follow_icon">Icon follow pengguna</string>
+    <string name="user_follow_icon">Icon ikuti pengguna</string>
     <string name="repository_count_icon">Icon jumlah repository</string>
     <string name="change_language_settings">Ubah Pengaturan Bahasa</string>
+    <string name="add_to_favorite">Tambah ke favorit</string>
+    <string name="show_favorite_users">Tampilkan pengguna favorit</string>
+    <string name="user_s_avatar">Gambar pengguna</string>
+    <string name="delete_button">Button hapus</string>
+    <string name="detail_user">Detil pengguna</string>
+    <string name="favorite_user">Pengguna favorit</string>
+    <string name="cannot_fetch">Tidak dapat mengambil data</string>
+    <string name="no_connection">Tidak ada koneksi</string>
+    <string name="added_fav">Ditambah ke favorit</string>
+    <string name="deleted_fav">Terhapus dari favorite</string>
 </resources>

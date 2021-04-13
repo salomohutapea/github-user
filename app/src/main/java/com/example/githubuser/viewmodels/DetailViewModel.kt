@@ -1,9 +1,15 @@
 package com.example.githubuser.viewmodels
 
+import android.content.ContentValues
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.githubuser.R
+import com.example.githubuser.db.DatabaseContract
+import com.example.githubuser.db.FavoriteHelper
 import com.example.githubuser.handlers.NetworkHandler
 import com.example.githubuser.models.UserDetail
 import com.example.githubuser.models.Users
@@ -88,7 +94,25 @@ class DetailViewModel : ViewModel() {
         })
     }
 
-    fun getSearchResult(): LiveData<UserDetail> {
+    fun addToFavorites(user: UserDetail, context: Context) {
+        val dbHelper = FavoriteHelper(context)
+        val values = ContentValues()
+
+        dbHelper.open()
+        values.put(DatabaseContract.FavoriteColumns.username, user.username)
+        values.put(DatabaseContract.FavoriteColumns.name, user.name)
+//        values.put(DatabaseContract.FavoriteColumns.location, user.location)
+//        values.put(DatabaseContract.FavoriteColumns.company, user.company)
+        values.put(DatabaseContract.FavoriteColumns.avatar, user.avatar)
+        values.put(DatabaseContract.FavoriteColumns.followers, user.followers)
+        values.put(DatabaseContract.FavoriteColumns.following, user.following)
+        values.put(DatabaseContract.FavoriteColumns.public_repos, user.public_repos)
+        dbHelper.insert(values)
+        dbHelper.close()
+        Toast.makeText(context, context.getString(R.string.added_fav), Toast.LENGTH_SHORT).show()
+    }
+
+    fun getDetailResult(): LiveData<UserDetail> {
         return detailResult
     }
 

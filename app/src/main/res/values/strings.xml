@@ -19,6 +19,16 @@
     <string name="search_hint">username</string>
     <string name="show_more">Show more</string>
     <string name="change_language_settings">Change Language Settings</string>
+    <string name="add_to_favorite">Add to favorite</string>
+    <string name="show_favorite_users">Show favorite users</string>
+    <string name="user_s_avatar">User\'s avatar</string>
+    <string name="delete_button">Delete button</string>
+    <string name="detail_user">User Detail</string>
+    <string name="favorite_user">Favorite User</string>
+    <string name="cannot_fetch">Cannot fetch data</string>
+    <string name="no_connection">No connection</string>
+    <string name="added_fav">Added to favorite</string>
+    <string name="deleted_fav">Deleted from favorite</string>
 </resources>
 
 

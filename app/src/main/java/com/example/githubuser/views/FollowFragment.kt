@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.githubuser.R
 import com.example.githubuser.databinding.FragmentFollowBinding
 import com.example.githubuser.handlers.ErrorHandler
-import com.example.githubuser.handlers.RecyclerViewHandler
+import com.example.githubuser.handlers.ListHandler
 import com.example.githubuser.models.Users
 import com.example.githubuser.viewmodels.UserListViewModel
 
@@ -19,7 +19,7 @@ class FollowFragment : Fragment() {
     private lateinit var userListViewModel: UserListViewModel
     private lateinit var rvFollow: RecyclerView
     private lateinit var binding: FragmentFollowBinding
-    private var rvHandler = RecyclerViewHandler()
+    private var rvHandler = ListHandler()
     private lateinit var token: String
 
     companion object {
@@ -42,7 +42,7 @@ class FollowFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        token = getString(R.string.github_token)
         binding = FragmentFollowBinding.inflate(inflater, container, false)
 
         // Add github token to string resource
@@ -74,7 +74,7 @@ class FollowFragment : Fragment() {
             rvHandler.list = arguments?.getSerializable(FOLLOWERS) as ArrayList<Users>
 
         context?.let {
-            rvHandler.showRecyclerView(rvFollow, userListViewModel, this, it, token)
+            rvHandler.showUserRecyclerView(rvFollow, userListViewModel, this, it, token)
         }
     }
 

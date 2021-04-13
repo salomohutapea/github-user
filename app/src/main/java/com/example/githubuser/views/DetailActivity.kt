@@ -33,6 +33,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.title = getString(R.string.detail_user)
 
         true.showLoading()
 
@@ -55,19 +56,22 @@ class DetailActivity : AppCompatActivity() {
             applicationContext?.let { context -> ErrorHandler().errorMessage(it, context) }
         }
 
-        detailViewModel.getSearchResult().observe(this) { data ->
+        detailViewModel.getDetailResult().observe(this) { data ->
             updateView(data)
+            binding.fabFavorite?.setOnClickListener {
+                detailViewModel.addToFavorites(data, this)
+            }
             flag++
         }
 
         detailViewModel.getFollowing().observe(this) {
             following = it
-            if(it.size != 0)
+            if (it.size != 0)
                 displayPager()
         }
         detailViewModel.getFollowers().observe(this) {
             followers = it
-            if(it.size != 0)
+            if (it.size != 0)
                 displayPager()
         }
 
@@ -80,8 +84,8 @@ class DetailActivity : AppCompatActivity() {
         viewPager.adapter = pagerAdapter
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = "Following"
-                1 -> tab.text = "Followers"
+                0 -> tab.text = getString(R.string.following)
+                1 -> tab.text = getString(R.string.followers)
             }
         }.attach()
 
@@ -109,10 +113,12 @@ class DetailActivity : AppCompatActivity() {
     private fun Boolean.showLoading() {
         if (this) {
             binding.progressDetail.visibility = View.VISIBLE
+            binding.fabFavorite?.visibility = View.GONE
             binding.constraintDetailAll.visibility = View.GONE
         } else {
             binding.progressDetail.visibility = View.GONE
             binding.constraintDetailAll.visibility = View.VISIBLE
+            binding.fabFavorite?.visibility = View.VISIBLE
         }
     }
 }

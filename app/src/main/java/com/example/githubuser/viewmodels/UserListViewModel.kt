@@ -41,7 +41,6 @@ class UserListViewModel : ViewModel() {
                         status.postValue(response.code())
                         currentPosition.postValue(i)
                         detailResult.postValue(listDetail)
-                        Log.d("USERDDETAIL1", response.body().toString())
                         if (listDetail.size == users.size) {
                             isLoading.postValue(false)
                         }
