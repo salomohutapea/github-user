@@ -1,30 +1,22 @@
 package com.example.consumerapp.handlers
 
 import android.content.Context
-import android.util.Log
-import android.widget.ListView
-import androidx.lifecycle.LifecycleOwner
-import com.example.consumerapp.adapter.FavoriteAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.consumerapp.adapter.FavoritesAdapter
 import com.example.consumerapp.models.UserDetail
-import com.example.consumerapp.viewmodels.FavoriteViewModel
 
 class ListHandler {
 
     fun showFavoriteListView(
-        listView: ListView,
-        favoriteViewModel: FavoriteViewModel,
+        rv: RecyclerView,
         favorites: ArrayList<UserDetail>,
-        context: Context,
-        owner: LifecycleOwner
+        context: Context
     ) {
-        val listFavAdapter = FavoriteAdapter(favorites)
-        listView.adapter = listFavAdapter
-
-        listFavAdapter.setOnDeleteCallback(object : FavoriteAdapter.OnDeleteClickCallback {
-            override fun onItemClicked(id: String, position: Int) {
-                favoriteViewModel.deleteItem(context, id)
-            }
-        })
+        val listFavAdapter = FavoritesAdapter(favorites)
+        rv.adapter = listFavAdapter
+        rv.setHasFixedSize(true)
+        rv.layoutManager = LinearLayoutManager(context)
     }
 
 }

@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         favViewModel.getDbReadResult().observe(this) { favorites ->
             if (favorites.size > 0) {
                 applicationContext?.let {
-                    rvHandler.showFavoriteListView(binding.lvFavorite, favViewModel, favorites, it, this)
+                    rvHandler.showFavoriteListView(binding.rvFavorite, favorites, this)
                 }
             } else {
                 showSnackBarMessage(getString(R.string.no_favorite))
@@ -42,6 +42,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showSnackBarMessage(message: String) {
-        Snackbar.make(binding.lvFavorite, message, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.rvFavorite, message, Snackbar.LENGTH_SHORT).show()
     }
 }
