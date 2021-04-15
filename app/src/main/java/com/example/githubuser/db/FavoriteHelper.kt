@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.example.githubuser.db.DatabaseContract.FavoriteColumns.Companion.TABLE_NAME
-import com.example.githubuser.db.DatabaseContract.FavoriteColumns.Companion._ID
+import com.example.githubuser.db.DatabaseContract.FavoriteColumns.Companion._USERNAME
 import java.sql.SQLException
 
 class FavoriteHelper(context: Context) {
@@ -43,23 +43,23 @@ class FavoriteHelper(context: Context) {
             null,
             null,
             null,
-            "$_ID ASC",
+            "$_USERNAME ASC",
             null)
     }
 
-    fun queryById(id: String): Cursor {
-        return database.query(DATABASE_TABLE, null, "$_ID = ?", arrayOf(id), null, null, null, null)
+    fun queryByUsername(username: String): Cursor {
+        return database.query(DATABASE_TABLE, null, "$_USERNAME = ?", arrayOf(username), null, null, null, null)
     }
 
     fun insert(values: ContentValues?): Long {
         return database.insert(DATABASE_TABLE, null, values)
     }
 
-    fun update(id: String, values: ContentValues?): Int {
-        return database.update(DATABASE_TABLE, values, "$_ID = ?", arrayOf(id))
+    fun update(username: String, values: ContentValues?): Int {
+        return database.update(DATABASE_TABLE, values, "$_USERNAME = ?", arrayOf(username))
     }
 
-    fun deleteById(id: String): Int {
-        return database.delete(DATABASE_TABLE, "$_ID = '$id'", null)
+    fun deleteByUsername(username: String): Int {
+        return database.delete(DATABASE_TABLE, "$_USERNAME = '$username'", null)
     }
 }

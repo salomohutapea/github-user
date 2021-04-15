@@ -32,13 +32,12 @@ class FavoriteViewModel : ViewModel() {
             favoriteHelper.close()
             isLoading.postValue(false)
         }
-
     }
 
     fun deleteFavorite(context: Context, id: String, position: Int) {
         val favoriteHelper = FavoriteHelper.getInstance(context)
         favoriteHelper.open()
-        favoriteHelper.deleteById(id)
+        favoriteHelper.deleteByUsername(id)
         favoriteHelper.close()
         status.postValue(position)
     }

@@ -22,6 +22,7 @@ class DetailViewModel : ViewModel() {
     private val detailResult = MutableLiveData<UserDetail>()
     private val detailFollowers = MutableLiveData<ArrayList<Users>>()
     private val detailFollowing = MutableLiveData<ArrayList<Users>>()
+    private val isUserFavorite = MutableLiveData<Boolean>()
     private val status = MutableLiveData<Int>()
 
     fun setDetailUser(username: String, token: String) {
@@ -94,22 +95,54 @@ class DetailViewModel : ViewModel() {
         })
     }
 
-    fun addToFavorites(user: UserDetail, context: Context) {
+    fun addOrDeleteFavorite(user: UserDetail, context: Context) {
         val dbHelper = FavoriteHelper(context)
-        val values = ContentValues()
+        if (user.username?.let { checkIfUserExists(it, context) } != true) {
+            addFavorite(dbHelper, context, user)
+        } else {
+            deleteFavorite(dbHelper, context, user.username)
+        }
+    }
 
+    fun checkIfUserExists(username: String, context: Context): Boolean {
+        val dbHelper = FavoriteHelper(context)
         dbHelper.open()
-        values.put(DatabaseContract.FavoriteColumns.username, user.username)
+        val cursor = dbHelper.queryByUsername(username)
+        return if (cursor.count == 0) {
+            isUserFavorite.postValue(false)
+            dbHelper.close()
+            false
+        } else {
+            isUserFavorite.postValue(true)
+            dbHelper.close()
+            true
+        }
+    }
+
+    private fun deleteFavorite(dbHelper: FavoriteHelper, context: Context, username: String) {
+        dbHelper.open()
+        username.let { dbHelper.deleteByUsername(it) }
+        dbHelper.close()
+        Toast.makeText(context, context.getString(R.string.deleted_fav), Toast.LENGTH_SHORT).show()
+        isUserFavorite.postValue(false)
+    }
+
+    private fun addFavorite(dbHelper: FavoriteHelper, context: Context, user: UserDetail) {
+        dbHelper.open()
+        val values = ContentValues()
+        values.put(DatabaseContract.FavoriteColumns._USERNAME, user.username)
         values.put(DatabaseContract.FavoriteColumns.name, user.name)
-//        values.put(DatabaseContract.FavoriteColumns.location, user.location)
-//        values.put(DatabaseContract.FavoriteColumns.company, user.company)
         values.put(DatabaseContract.FavoriteColumns.avatar, user.avatar)
         values.put(DatabaseContract.FavoriteColumns.followers, user.followers)
         values.put(DatabaseContract.FavoriteColumns.following, user.following)
         values.put(DatabaseContract.FavoriteColumns.public_repos, user.public_repos)
-        dbHelper.insert(values)
+        if (dbHelper.insert(values) < 0) {
+            Toast.makeText(context, context.getString(R.string.error_add_fav), Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, context.getString(R.string.added_fav), Toast.LENGTH_SHORT).show()
+        }
+        isUserFavorite.postValue(true)
         dbHelper.close()
-        Toast.makeText(context, context.getString(R.string.added_fav), Toast.LENGTH_SHORT).show()
     }
 
     fun getDetailResult(): LiveData<UserDetail> {
@@ -122,6 +155,10 @@ class DetailViewModel : ViewModel() {
 
     fun getFollowing(): LiveData<ArrayList<Users>> {
         return detailFollowing
+    }
+
+    fun getIsUserFavorite(): LiveData<Boolean> {
+        return isUserFavorite
     }
 
     fun getStatus(): LiveData<Int> {

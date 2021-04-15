@@ -14,8 +14,7 @@ internal class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATA
         private const val DATABASE_VERSION = 1
 
         private const val SQL_CREATE_TABLE_NOTE = "CREATE TABLE $TABLE_NAME" +
-                " (${DatabaseContract.FavoriteColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT," +
-                " ${DatabaseContract.FavoriteColumns.username} TEXT NOT NULL," +
+                " ( ${DatabaseContract.FavoriteColumns._USERNAME} TEXT PRIMARY KEY NOT NULL," +
                 " ${DatabaseContract.FavoriteColumns.name} TEXT," +
                 " ${DatabaseContract.FavoriteColumns.company} TEXT," +
                 " ${DatabaseContract.FavoriteColumns.location} TEXT," +

@@ -61,7 +61,7 @@ class FavoriteProvider : ContentProvider() {
 
     override fun delete(uri: Uri, s: String?, strings: Array<String>?): Int {
         val deleted: Int = when (2) {
-            sUriMatcher.match(uri) -> favHelper.deleteById(uri.lastPathSegment.toString())
+            sUriMatcher.match(uri) -> favHelper.deleteByUsername(uri.lastPathSegment.toString())
             else -> 0
         }
 

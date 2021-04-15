@@ -28,6 +28,7 @@ class DetailActivity : AppCompatActivity() {
     private var following = ArrayList<Users>()
     private var followers = ArrayList<Users>()
     private var flag = 0
+    private var data = UserDetail()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,28 +40,33 @@ class DetailActivity : AppCompatActivity() {
 
         // Add github token to string resource
         token = getString(R.string.github_token)
-
         viewPager = findViewById(R.id.view_pager)
         tabs = findViewById(R.id.tabs)
+
+        initializeViewModel()
+
+    }
+
+    private fun initializeViewModel() {
 
         val username = intent.getSerializableExtra("USERNAME") as String
 
         detailViewModel =
             ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(DetailViewModel::class.java)
 
-        detailViewModel.setDetailUser(username, token)
-        detailViewModel.setFollowers(username, token)
-        detailViewModel.setFollowing(username, token)
-
         detailViewModel.getStatus().observe(this) {
-            applicationContext?.let { context -> ErrorHandler().errorMessage(it, context) }
+            if (it == 444) {
+                applicationContext?.let { context -> ErrorHandler().errorMessage(it, context) }
+            }
+        }
+
+        detailViewModel.getIsUserFavorite().observe(this) {
+            it.isUserFavorite()
         }
 
         detailViewModel.getDetailResult().observe(this) { data ->
             updateView(data)
-            binding.fabFavorite?.setOnClickListener {
-                detailViewModel.addToFavorites(data, this)
-            }
+            this.data = data
             flag++
         }
 
@@ -75,6 +81,15 @@ class DetailActivity : AppCompatActivity() {
                 displayPager()
         }
 
+        detailViewModel.checkIfUserExists(username, this)
+        detailViewModel.setDetailUser(username, token)
+        detailViewModel.setFollowers(username, token)
+        detailViewModel.setFollowing(username, token)
+
+        binding.fabFavorite?.setOnClickListener {
+            detailViewModel.addOrDeleteFavorite(data, applicationContext)
+            binding.fabFavorite?.setImageResource(R.drawable.ic_baseline_delete_24)
+        }
     }
 
     private fun displayPager() {
@@ -119,6 +134,14 @@ class DetailActivity : AppCompatActivity() {
             binding.progressDetail.visibility = View.GONE
             binding.constraintDetailAll.visibility = View.VISIBLE
             binding.fabFavorite?.visibility = View.VISIBLE
+        }
+    }
+
+    private fun Boolean.isUserFavorite() {
+        if (this) {
+            binding.fabFavorite?.setImageResource(R.drawable.ic_baseline_delete_24)
+        } else {
+            binding.fabFavorite?.setImageResource(R.drawable.ic_baseline_favorite_24)
         }
     }
 }

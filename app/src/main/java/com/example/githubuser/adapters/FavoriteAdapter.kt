@@ -55,7 +55,7 @@ class FavoriteAdapter(private val listUser: ArrayList<UserDetail>) : BaseSwipeAd
         val txtFollowers = convertView.findViewById(R.id.fav_followers) as TextView
 
         deleteButton.setOnClickListener {
-            onDeleteClickCallback.onItemClicked(user._ID, position)
+            user.username?.let { it1 -> onDeleteClickCallback.onItemClicked(it1, position) }
         }
 
         detailButton.setOnClickListener {
@@ -74,7 +74,7 @@ class FavoriteAdapter(private val listUser: ArrayList<UserDetail>) : BaseSwipeAd
     }
 
     interface OnDeleteClickCallback {
-        fun onItemClicked(id: String, position: Int)
+        fun onItemClicked(username: String, position: Int)
     }
 
     interface OnDetailClickCallback {
