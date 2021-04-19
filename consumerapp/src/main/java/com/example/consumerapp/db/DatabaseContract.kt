@@ -11,8 +11,7 @@ internal class DatabaseContract {
             private const val SCHEME = "content"
 
             const val TABLE_NAME = "favorite"
-            const val _ID = "_id"
-            const val username = "username"
+            const val _USERNAME = "username"
             const val name = "name"
             const val following = "following"
             const val followers = "followers"

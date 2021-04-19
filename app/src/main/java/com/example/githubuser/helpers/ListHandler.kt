@@ -71,8 +71,8 @@ class ListHandler {
         listView.adapter = listFavAdapter
 
         listFavAdapter.setOnDeleteCallback(object : FavoriteAdapter.OnDeleteClickCallback {
-            override fun onItemClicked(id: String, position: Int) {
-                favoriteViewModel.deleteFavorite(context, id, position)
+            override fun onItemClicked(username: String, position: Int) {
+                favoriteViewModel.deleteFavorite(context, username, position)
             }
         })
         listFavAdapter.setOnDetailCallback(object : FavoriteAdapter.OnDetailClickCallback {
