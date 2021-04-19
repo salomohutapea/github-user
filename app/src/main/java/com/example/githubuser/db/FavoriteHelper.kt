@@ -44,7 +44,8 @@ class FavoriteHelper(context: Context) {
             null,
             null,
             "$_USERNAME ASC",
-            null)
+            null
+        )
     }
 
     fun queryByUsername(username: String): Cursor {

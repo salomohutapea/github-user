@@ -58,7 +58,7 @@ class DetailViewModel : ViewModel() {
                 call: Call<ArrayList<Users>>,
                 response: Response<ArrayList<Users>>
             ) {
-                response.body()?.forEach() {
+                response.body()?.forEach {
 
                     if (it.avatar != null && it.username != null) {
                         data.add(it)
@@ -84,7 +84,7 @@ class DetailViewModel : ViewModel() {
                 call: Call<ArrayList<Users>>,
                 response: Response<ArrayList<Users>>
             ) {
-                response.body()?.forEach() {
+                response.body()?.forEach {
                     if (it.avatar != null && it.username != null) {
                         data.add(it)
                     }

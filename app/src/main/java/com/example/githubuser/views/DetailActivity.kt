@@ -127,11 +127,11 @@ class DetailActivity : AppCompatActivity() {
 
     private fun Boolean.showLoading() {
         if (this) {
-            binding.progressDetail.visibility = View.VISIBLE
+            binding.progressDetail?.visibility = View.VISIBLE
             binding.fabFavorite?.visibility = View.GONE
             binding.constraintDetailAll.visibility = View.GONE
         } else {
-            binding.progressDetail.visibility = View.GONE
+            binding.progressDetail?.visibility = View.GONE
             binding.constraintDetailAll.visibility = View.VISIBLE
             binding.fabFavorite?.visibility = View.VISIBLE
         }
